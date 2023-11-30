@@ -1,4 +1,4 @@
-public class LegalAdvisorProcessor23{
+public class LegalAdvisorProcessor{
 
     public static void processLegalAdvisors(List<LegalAdvisor> advisors) {
         List<LegalAdvisor> recordsToUpdate = new List<LegalAdvisor>();
