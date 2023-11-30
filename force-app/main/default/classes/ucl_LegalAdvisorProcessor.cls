@@ -1,26 +1,25 @@
-public class LegalAdvisorProcessor{
-
+public class ucl_LegalAdvisorProcessor{
     public static void processLegalAdvisors(List<LegalAdvisor> advisors) {
         List<LegalAdvisor> recordsToUpdate = new List<LegalAdvisor>();
-        List<Customer> customersToUpdate = new List<Customer>();
+        List<Customer> clientToUpdate = new List<client>();
 
         for (LegalAdvisor advisor : advisors) {
             if (advisor.Status__c == 'Enabled') {
-                if (advisor.Id == null) {
+                if (advisor.AccountNumber == null) {
                     // Insert new 'Enabled' Legal Advisor
                     insert advisor;
                 } else {
                     // Update existing 'Enabled' Legal Advisor
                     recordsToUpdate.add(advisor);
                 }
-            } else if (advisor.Status__c == 'Disabled' && advisor.Id != null) {
+            } else if (advisor.Status__c == 'Disabled' && advisor.AccountNumber != null) {
                 // Handle existing 'Disabled' Legal Advisor
                 advisor.Status__c = 'Disabled';
                 recordsToUpdate.add(advisor);
             }
 
-            // Update related customers
-            customersToUpdate.addAll(advisor.Related_Customers__r);
+            // Update related clients
+            customersToUpdate.addAll(advisor.Related_Client__r);
         }
 
         // Update Legal Advisor records
@@ -28,7 +27,7 @@ public class LegalAdvisorProcessor{
             update recordsToUpdate;
         }
 
-        // Update related customer records
+        // Update related client records
         if (!customersToUpdate.isEmpty()) {
             update customersToUpdate;
         }
