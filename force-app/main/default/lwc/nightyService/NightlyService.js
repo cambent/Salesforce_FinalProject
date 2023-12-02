@@ -1,15 +1,15 @@
 import { LightningElement } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import ACCOUNT_OBJECT from '@salesforce/schema/Account';
-import NAME_FIELD from '@salesforce/schema/Account.Name';
-import REVENUE_FIELD from '@salesforce/schema/Account.AnnualRevenue';
-import INDUSTRY_FIELD from '@salesforce/schema/Account.Industry';
-export default class AccountCreator extends LightningElement {
-    objectApiName = ACCOUNT_OBJECT;
-    fields = [NAME_FIELD, REVENUE_FIELD, INDUSTRY_FIELD];
+import LEGAL_ADVISOR_OBJECT from '@salesforce/schema/LegalAdvisor';
+import ACCOUNT_NAME_FIELD from '@salesforce/schema/Account.Name';
+import ACCOUNT_NUMBER_FIELD from '@salesforce/schema/Account.Number';
+import ACCOUNT_STATUS_FIELD from '@salesforce/schema/Account.Status';
+export default class AccountUpdated extends LightningElement {
+    objectApiName = LEGAL_ADVISOR_OBJECT;
+    fields = [ACCOUNT_NAME_FIELD, ACCOUNT_NUMBER_FIELD, ACCOUNT_STATUS_FIELD];
     handleSuccess(event) {
         const toastEvent = new ShowToastEvent({
-            title: "Account created",
+            title: "Account Updated",
             message: "Record ID: " + event.detail.id,
             variant: "success"
         });
