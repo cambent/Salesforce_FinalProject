@@ -9,7 +9,7 @@ export default class AccountUpdated extends LightningElement {
     fields = [ACCOUNT_NAME_FIELD, ACCOUNT_NUMBER_FIELD, ACCOUNT_STATUS_FIELD];
     handleSuccess(event) {
         const toastEvent = new ShowToastEvent({
-            title: "Account Updated",
+            title: "Lagal Account Updated",
             message: "Record ID: " + event.detail.id,
             variant: "success"
         });

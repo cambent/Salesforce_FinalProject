@@ -4,8 +4,8 @@
     <externalId>false</externalId>
     <label>Client</label>
     <referenceTo>Client__c</referenceTo>
-    <relationshipLabel>Legal Advisors</relationshipLabel>
-    <relationshipName>Legal_Advisors</relationshipName>
+    <relationshipLabel>Client Associated</relationshipLabel>
+    <relationshipName>Client</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>
     <trackTrending>false</trackTrending>

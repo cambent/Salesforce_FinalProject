@@ -152,10 +152,10 @@
     <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
+    <externalSharingModel>ReadWrite</externalSharingModel>
     <label>Client</label>
     <nameField>
-        <label>Client Name</label>
+        <label>Legal Advisor Associated</label>
         <type>Text</type>
     </nameField>
     <pluralLabel>Clients</pluralLabel>

@@ -155,10 +155,10 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Legal Advisor</label>
     <nameField>
-        <label>Legal_Advisor Name</label>
+        <label>Legal Advisor Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Legal Advisors</pluralLabel>
+    <pluralLabel>Legal Advisor</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
