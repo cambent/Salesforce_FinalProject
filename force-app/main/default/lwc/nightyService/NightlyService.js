@@ -16,3 +16,4 @@ export default class AccountUpdated extends LightningElement {
         this.dispatchEvent(toastEvent);
     }
 }
+

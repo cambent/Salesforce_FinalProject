@@ -4,7 +4,7 @@
     <externalId>false</externalId>
     <label>Legal Advisor</label>
     <referenceTo>Legal_Advisor__c</referenceTo>
-    <relationshipLabel>New Client</relationshipLabel>
+    <relationshipLabel>Clients</relationshipLabel>
     <relationshipName>Clients</relationshipName>
     <relationshipOrder>0</relationshipOrder>
     <reparentableMasterDetail>false</reparentableMasterDetail>

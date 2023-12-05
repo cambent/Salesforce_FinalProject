@@ -1,4 +1,4 @@
-public class NightyProcessor {
+public static class NightyProcessor {
     public HttpResponse makeGetCallout() {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
@@ -8,18 +8,25 @@ public class NightyProcessor {
 
         // Verificar si la solicitud fue exitosa y parsear la respuesta JSON.
         if (response.getStatusCode() == 200) {
-            List<Object> legalAccountJSON = (List<Object>)JSON.deserializeUntyped(response.getBody());
+            List<Object> legalAccountJSONList = (List<Object>)JSON.deserializeUntyped(response.getBody.toString());
             List<Legal_Advisor__c> legalAdvisorToUpsert = new List<Legal_Advisor__c>();
             
             // Iterar sobre la lista de cuentas legales JSON
-            for (Object legalAdvisorJSON : legalAdvisorJSON) {
-                Map<String, Object> legalAdvisorJSONMap= new (Map<String, Object>) legalAdvisorJSONMap;
-                String accountStatus = (String) legalAdvisorJSONMap.get('AccountStatus');
+            for (Object legalAccountJSON : legalAccountJSONList) {
+                Map<String, Object> legalAdvisorJSONMap = (Map<String, Object>)legalAccountJJSON;
+                String accountStatus = (String)legalAdvisorJSONMap.get('AccountStatus');
 
                 if (accountStatus != null && accountStatus.equals('Enabled')) {
-                    String accountName = (String)legalAdvisorJSON.get('AccountName');
-                    String accountNumber = (String)legalAdvisorJSON.get('AccountNumber');
-                    Date asOfDate = Date.parse((String)legalAdvisorJSON.get('AsOfDate'));
+                    String accountName = (String)legalAccountJSONMap.get('AccountName');
+                    String accountNumber = (String)legalAccountJSONMap.get('AccountNumber');
+                    Date asOfDate = Date.parse((String)legalAccountJSONMap.get('AsOfDate'));}
+
+                    try {
+                        asOfDate = Date.parse((String)legalAccountJSONMap.get('AsOfDate'));
+                    } catch (Exception e) {
+                        System.debug('Error de fecha: ' + e.getMessage());
+                        asOfDate = Date.today();
+                    }
 
                     Legal_Advisor__c legalAdvisor = new Legal_Advisor__c(
                         AccountNumber__c = accountNumber,
@@ -27,46 +34,66 @@ public class NightyProcessor {
                         AccountStatus__c = accountStatus,
                         AsOfDate__c = asOfDate
                     );
-
+            
                     legalAdvisorToUpsert.add(legalAdvisor);
-                } else if (accountStatus.equals('Disable')) {
-                    String accountNumber = (String)legalAdvisorJSON.get('AccountNumber');
+                     } else if (accountStatus.equals('Disabled')) {
+                    String accountNumber = (String)legalAdvisorJSONMap.get('AccountNumber');
                     List<Legal_Advisor__c> legalAdvisors = [SELECT Id FROM Legal_Advisor__c WHERE AccountNumber__c = :accountNumber LIMIT 1];
 
                     if (!legalAdvisors.isEmpty()) {
                         Legal_Advisor__c legalAdvisor = legalAdvisors[0];
                         legalAdvisor.AccountStatus__c = accountStatus;
+
+                       
                         update legalAdvisor;
-
-                        try{
-                            asOfDate = date.paese(asOfDateString);
-                        }catch (Exception e)
-                        System.debug('Error de fecha: ' + e.getMessage());
-                        asOfDate = Date.today();
-
                     }
                 }
             }
+            
+            //Lista clientes
+
+            List<Object> ClientList = List<Object> legalAccountJSONList.get ('Clients');
+            for(Object ClientObj : ClientList){
+                Map<String, Object> ClientMap = (Map<String, Object>) clientObj;
+                
+                Client_c clientData = insert new Client_c();
+                ClientData.Client_Number_c = (String) clientMap.get('ClientNumber');
+                upsert clienttoUpsert Client_Number_c;
+            }
+
             // Realizar la operación de upsert después de la iteración
             if (!legalAdvisorToUpsert.isEmpty()) {
                 upsert legalAdvisorToUpsert AccountNumber__c;
             }
         }
-
         return response;
     }
-}
+
 
 public class ExecuteNightlyProcess implements Schedulable {
     public void execute(SchedulableContext ctx) {
-        List<Legal_Advisor__c> legalAdvisor = [SELECT AccountNumber, AccountName, AccountStatus, asOfDate
-            FROM legalAdvisorJSON
-            WHERE IsClosed = False AND
-            CloseDate < TODAY];
+        List<Legal_Advisor__c> legalAdvisors = [SELECT AccountNumber, AccountName, AccountStatus, AsOfDate FROM Legal_Advisor__c
+                                                WHERE IsClosed = False AND CloseDate < TODAY];
         // Create a task for each opportunity in the list
-        TaskUtils.remindOwners(opptys);
+        TaskUtils.remindOwners(legalAdvisors);
     }
 }
+
+//Return Exist client
+
+private static Client_c returnExistingClient(String clientNumber){
+    List<Client_c> existingClient = [
+        SELECT
+        Client_Number_c
+        First_Name_c
+       Email_c
+      Phone_c
+    Address_c
+    FROM Client_c = clientNumber
+    LIMIT 1
+    ];
+}
+
 
 @isTest
 private class TestNightyProcessor {
@@ -83,8 +110,6 @@ private class TestNightyProcessor {
 
         // Llamar al método makeGetCallout en la instancia
         HttpResponse response = processor.makeGetCallout();
-
-        // Detener el entorno de prueba
         Test.stopTest();
 
         // Verificar la respuesta HTTP
