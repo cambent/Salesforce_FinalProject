@@ -1,4 +1,4 @@
-public static class NightyProcessor {
+public static class NightlyProcessor {
     public HttpResponse makeGetCallout() {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
